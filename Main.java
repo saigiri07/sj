@@ -6,7 +6,7 @@ public class Main{
         BufferedReader br;
         StringTokenizer st;
         public FastReader(){
-            br=new BufferedReader(new InputStreamReader(System.in));
+            br=new BufferedReader(new InputStreamReader(System.in));//dhks
         }
         String next(){
             while(st==null || !st.hasMoreTokens()){
