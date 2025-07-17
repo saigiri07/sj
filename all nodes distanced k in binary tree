@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        HashMap<TreeNode,TreeNode> parent=new HashMap<>();
+        Queue<TreeNode> q=new LinkedList<>();
+        if(root==null)return new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            TreeNode t=q.poll();
+            TreeNode left=t.left;
+            TreeNode right=t.right;
+            if(left!=null){
+                parent.put(left,t);
+                q.add(left);
+                }
+            if(right!=null){
+                parent.put(right,t);
+                q.add(right);
+            }
+        }
+            q.add(target);
+            int steps=0;
+            List<Integer> res=new LinkedList<>();
+            Set<TreeNode> visited=new HashSet<>();
+            visited.add(target);
+            while(!q.isEmpty()){
+                int x=q.size();
+                for(int i=0;i<x;i++){
+                    TreeNode cur=q.poll();
+                    if(steps==k){
+                        res.add(cur.val);
+                    }
+                    TreeNode l=cur.left;
+                    TreeNode r=cur.right;
+                    TreeNode p=parent.get(cur);
+                    if(l!=null&&!visited.contains(l)){
+                        visited.add(l);
+                        q.add(l);
+                    }if(r!=null&&!visited.contains(r)){
+                        q.add(r);
+                        visited.add(r);
+                    }if(p!=null&&!visited.contains(p)){
+                        q.add(p);
+                        visited.add(p);
+                    }
+                }
+                steps++;
+                if(steps>k)return res;
+            }
+            return res;
+    }
+}
