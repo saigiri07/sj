@@ -1,0 +1,35 @@
+class Solution {
+    public int maximalNetworkRank(int n, int[][] roads) {
+        int [][]con=new int[n][n];
+        int size[]=new int[n];
+                for(int t[]:roads){
+                    int citya=t[0];
+                    int cityb=t[1];
+                    con[citya][cityb]=1;
+                    con[cityb][citya]=1;
+                    size[citya]++;
+                    size[cityb]++;
+        }
+        int max=0;
+//the goal is to find two city nodes with max degree
+//if there connected we just have to count only once
+// size array indicates the degree of node
+// since it bidirectional we take n*n array
+
+        for(int i=0;i<n;i++){
+            if(size[i]==0)
+                continue;
+                int x=size[i];
+            for(int j=i+1;j<n;j++){
+                if(size[j]==0)
+                continue;
+                int y=size[j];
+                int t=x+y;
+                if(con[i][j]==1)
+                    t-=1;
+                if(max<t)max=t;
+            }
+        }
+        return max;
+    }
+}
