@@ -1,0 +1,47 @@
+// using union find we put all the equal variables in one group and the we check if the not equal condition satisfies
+
+class Solution {
+      public boolean equationsPossible(String[] equations) {
+        Arrays.sort(equations,(a,b)->-a.charAt(1)+b.charAt(1));
+        
+        int[] uf=new int[26];
+        int[] rank=new int[26];
+        Arrays.fill(uf,-1);
+        Arrays.fill(rank,1);
+        for(String s:equations){
+            int x=s.charAt(0)-'a';
+            int y=s.charAt(3)-'a';
+            if(s.charAt(1)=='='){
+                uf[x]=find(x,uf);
+                uf[y]=find(y,uf);
+                int xp=uf[x];
+                int yp=uf[y];
+                    if (rank[xp] > rank[yp]) {
+                        rank[xp] += rank[yp];
+                        uf[yp]=uf[x];
+                        
+                    } else {
+                        rank[yp] += rank[xp];
+                        uf[xp]=uf[y];
+                        
+                    }
+            }else{
+
+                uf[x]=find(x,uf);
+                uf[y]=find(y,uf);
+                if (uf[x] ==uf[y]) return false;
+                
+            }
+        }
+        return true;
+    }
+    public int find(int i,int[] uf){
+        if(uf[i]==-1) {
+            uf[i]=i;
+            return i;
+        }
+        if(uf[i]==i)return i;
+        uf[i]=find(uf[i],uf);
+        return uf[i];
+    }
+}
