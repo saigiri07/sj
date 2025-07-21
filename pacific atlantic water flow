@@ -1,0 +1,76 @@
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+                int n = heights.length;
+        int m = heights[0].length;
+
+        boolean[][] visited = new boolean[n][m];
+        int[][] mark = new int[n][m]; // 1 - pacific, 2 - atlantic
+
+        Queue<int[]> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            mark[i][0] = 1;
+            q.add(new int[] {i, 0});
+        }
+        for (int i = 0; i < m; i++) {
+            mark[0][i] = 1;
+            q.add(new int[] {0, i});
+        }
+
+        int[][] dirs = new int[][] { {-1, 0}, {0, 1}, {1, 0}, {0, -1} };
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            int r = curr[0];
+            int c = curr[1];
+            if (visited[r][c]) continue;
+            mark[r][c] = 1;
+            visited[r][c] = true;
+            for (int[] dir : dirs) {
+                int nextR = r + dir[0];
+                int nextC = c + dir[1];
+                if (nextR < 0 || nextR >= n || nextC < 0 || nextC >= m) continue;
+                if (visited[nextR][nextC]) continue;
+                if (heights[nextR][nextC] >= heights[r][c]) {
+                    q.offer(new int[] {nextR, nextC});
+                }
+            }
+        }
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        // --- Atlantic ---
+        for (int i = 0; i < n; i++) {
+            if (mark[i][m - 1] == 1) res.add(List.of(i, m - 1));
+            mark[i][m - 1] = 2;
+            q.add(new int[] {i, m - 1});
+        }
+        for (int i = 0; i < m; i++) {
+            if (mark[n - 1][i] == 1) res.add(List.of(n - 1, i));
+            mark[n - 1][i] = 2;
+            q.add(new int[] {n - 1, i});
+        }
+
+        visited = new boolean[n][m];
+
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            int r = curr[0];
+            int c = curr[1];
+            if (visited[r][c]) continue;
+            if (mark[r][c] == 1) res.add(List.of(r, c));
+            mark[r][c] = 2;
+            visited[r][c] = true;
+            for (int[] dir : dirs) {
+                int nextR = r + dir[0];
+                int nextC = c + dir[1];
+                if (nextR < 0 || nextR >= n || nextC < 0 || nextC >= m) continue;
+                if (visited[nextR][nextC]) continue;
+                if (heights[nextR][nextC] >= heights[r][c]) {
+                    q.offer(new int[] {nextR, nextC});
+                }
+            }
+
+        }
+
+        return res;
+    }
+}
