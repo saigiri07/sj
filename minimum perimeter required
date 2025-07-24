@@ -1,0 +1,19 @@
+class Solution {
+    public long minimumPerimeter(long neededApples) {
+        
+        long i=3;
+        long c=1;
+        long prev=0l;
+        while(prev<neededApples){
+            long sum=0;
+            sum+=c*4+c*8;//including the apples on axis and edges
+            long t=0;
+            long n=(c+c-c-1);
+            t=n*(c+c-1+c+1)/2;//including the apples b/w axis to edges
+            prev+=sum+t*8;//previous sum to include the apples inside
+            i+=2;
+            c++;
+        }
+        return (i-3)*4;
+    }
+}
